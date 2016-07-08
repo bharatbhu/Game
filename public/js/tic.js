@@ -30,7 +30,6 @@ var App = React.createClass({
     },
 
     set: function(indicator) {
-        debugger;
         var td = this.refs[indicator];
 
         if (td.props.children.length !== 0) {
