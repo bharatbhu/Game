@@ -22,7 +22,7 @@ var App = React.createClass({
     win: function(score) {
         var i;
         for (i = 0; i < this.props.wins.length; i += 1) {
-            if ((this.props.wins[i] & score) === this.props.wins[i]) {
+            if ((score) === this.props.wins[i]) {
                 return true;
             }
         }
@@ -30,6 +30,7 @@ var App = React.createClass({
     },
 
     set: function(indicator) {
+        debugger;
         var td = this.refs[indicator];
 
         if (td.props.children.length !== 0) {
@@ -56,7 +57,7 @@ var App = React.createClass({
                     endGame(this.props.players[0]);
                 }
             }
-            console.log(this.props.turn + " wins!");
+            return;
         } else if (this.props.moves === Math.pow(this.props.size, 2)) {
             console.log("Game is tied!");
             endGame('Tied');

@@ -3,7 +3,8 @@
 /**
  * Multiplayer Tic-Tac-Toe game using react and socketio libraries.
  */
-
+var fs = require('fs');
+var data = require('./data.json');
 var express = require('express'),
     app = express(),
     server = require('http').Server(app),
@@ -16,7 +17,7 @@ var express = require('express'),
     numPlayers = 0,
     gamesCount = 0,
     playersWaiting = [],
-    SIZE = 4;
+    SIZE = data.size;
 /**
  * CONFIGURING EXPRESS
  */

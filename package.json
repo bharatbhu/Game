@@ -13,6 +13,7 @@
     "browserify-middleware": "^5.0.0",
     "ejs": "^2.2.4",
     "express": "^4.11.2",
+    "file-system": "^2.2.1",
     "literalify": "^0.3.0",
     "method-override": "^2.3.1",
     "react": "^0.12.2",
