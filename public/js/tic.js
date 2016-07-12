@@ -6,7 +6,7 @@ var DOM = React.DOM,
     td = DOM.td;
 
 var App = React.createClass({
-    getInitialState: function() {
+    getInitialState: function () {
         return {
             turn: "X",
             score: {
@@ -19,7 +19,7 @@ var App = React.createClass({
     },
 
 
-    win: function(score) {
+    win: function (score) {
         var i;
         for (i = 0; i < this.props.wins.length; i += 1) {
             if ((score) === this.props.wins[i]) {
@@ -29,7 +29,7 @@ var App = React.createClass({
         return false;
     },
 
-    set: function(indicator) {
+    set: function (indicator) {
         var td = this.refs[indicator];
 
         if (td.props.children.length !== 0) {
@@ -42,7 +42,7 @@ var App = React.createClass({
 
         this.setState(this.props);
 
-        if (this.win(this.props.score[this.props.turn])) {
+        if (checkWinningState(getWinsArray(this.props.tiles, this.props.size), this.props.turn)) {
             if (this.props.turn === 'X') {
                 if (this.props.players[0] === playerName) {
                     endGame(playerName);
@@ -57,7 +57,8 @@ var App = React.createClass({
                 }
             }
             return;
-        } else if (this.props.moves === Math.pow(this.props.size, 2)) {
+        } else
+        if (this.props.moves === Math.pow(this.props.size, 2)) {
             console.log("Game is tied!");
             endGame('Tied');
         } else {
@@ -66,7 +67,7 @@ var App = React.createClass({
         }
     },
 
-    render: function() {
+    render: function () {
         var rows = [],
             indicator = 1;
 
@@ -137,9 +138,9 @@ var App = React.createClass({
 });
 
 function renderTTT(turn, size, score, moves, wins, tiles, players) {
-    React.render( < App size = {
-            size
-        }
+    React.render(< App size = {
+        size
+    }
         turn = {
             turn
         }
@@ -157,6 +158,87 @@ function renderTTT(turn, size, score, moves, wins, tiles, players) {
         }
         players = {
             players
-        }
-        />, document.getElementById('game'));
+        }/>, document.getElementById('game'));
+}
+
+
+function checkWinningState(data, marker) {
+    var valueToCheck = marker === 'X' ? 1 : 2;
+    var result = false;
+    var diagonalsArray = [true, true];
+
+    // Check in every row
+    result = data.find(function (row) {
+        return _every(row, valueToCheck);
+    });
+    if (result) {
+        return !!result;
     }
+
+
+    // Check in every column
+    result = data.find(function (row, index) {
+        var column = getCol(data, index);
+        return _every(column, valueToCheck);
+    });
+    if (result) {
+        return !!result;
+    }
+
+    // Check in each diagonal
+    result = diagonalsArray.find(function (value, index) {
+        var diagonal = getDiagonal(data, index);
+        return _every(diagonal, valueToCheck);
+    });
+
+    return !!result;
+}
+
+function getCol(matrix, col) {
+    var column = [];
+    for (var i = 0; i < matrix.length; i++) {
+        column.push(matrix[i][col]);
+    }
+    return column;
+}
+
+
+function getDiagonal(matrix, index) {
+    var diagonal = [];
+    var i = 0, j = matrix.length - 1;
+    if (index === 0) {
+        for (; i < matrix.length; i++) {
+            diagonal.push(matrix[i][i]);
+        }
+    } else if (index === 1) {
+        for (i = 0; i < matrix.length; i++) {
+            diagonal.push(matrix[i][j]);
+            j--;
+        }
+    }
+    return diagonal;
+}
+
+function _every(array, valueToCheck) {
+    return array.every(function (value) {
+        return value === valueToCheck;
+    });
+}
+
+
+function getWinsArray(tiles, size) {
+    var result = [];
+    var i, j = 0, row = [];
+    for (var i = 0; i < Math.pow(size, 2); i++) {
+        var key = Math.pow(2, i);
+        row.push(tiles[key] === '' ? 0 : tiles[key] === 'X' ? 1 : 2);
+        j++;
+
+        if (j === size) {
+            result.push(row);
+            j = 0;
+            row = [];
+        }
+    }
+    return result;
+}

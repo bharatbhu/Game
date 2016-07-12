@@ -38,18 +38,18 @@ app.use(methodOverride());
  * ROUTES
  */
 
-app.get('/', function(req, res, next) {
+app.get('/', function (req, res, next) {
     res.render('app.ejs', {
         title: "Tic Tac Toe"
     });
 });
 
-io.on('connection', function(socket) {
+io.on('connection', function (socket) {
     var addedPlayer = false,
         room = null;
 
     // New player
-    socket.on('add player', function(playerName) {
+    socket.on('add player', function (playerName) {
         console.log(playerName + ' added to players list');
         socket.playerName = playerName;
 
@@ -81,36 +81,6 @@ io.on('connection', function(socket) {
         }
     });
 
-    var Wins = function(size) {
-        var val = 1,
-            cells = [],
-            wins = [];
-        for (var i = 0; i < size; i++) {
-            cells[i] = [];
-            for (var j = 0; j < size; j++) {
-                cells[i][j] = val;
-                val *= 2;
-            }
-        }
-
-        /* We add here all winning chances value of row, column and diaognal value */
-        var rowWins = [],
-            colWins = [],
-            leftDiagWin = 0,
-            rightDiagWin = 0;
-        for (i = 0; i < size; i++) {
-            rowWins[i] = 0;
-            colWins[i] = 0;
-            leftDiagWin += cells[i][i];
-            rightDiagWin += cells[i][size - i - 1];
-            for (j = 0; j < size; j++) {
-                rowWins[i] += cells[i][j];
-                colWins[i] += cells[j][i];
-            }
-        }
-        return rowWins.concat(colWins, leftDiagWin, rightDiagWin);
-    };
-
     function getTiles() {
         var result = {};
         var i;
@@ -122,7 +92,7 @@ io.on('connection', function(socket) {
     }
 
     // Join Game Room
-    socket.on('join room', function(room) {
+    socket.on('join room', function (room) {
         console.log(socket.playerName + ' joining ' + room);
 
         var game = {
@@ -134,7 +104,7 @@ io.on('connection', function(socket) {
             moves: 0,
             size: SIZE,
             tiles: getTiles(),
-            wins: Wins(SIZE),
+            wins: [],
             players: [],
             id: room
         };
@@ -198,24 +168,24 @@ io.on('connection', function(socket) {
     });
 
     // Player move
-    socket.on('move', function(state) {
+    socket.on('move', function (state) {
         io.to(socket.room).emit('move', state);
     });
 
     // Leave room
-    socket.on('leave room', function() {
+    socket.on('leave room', function () {
         socket.leave(socket.room);
     });
 
     // End Game
-    socket.on('end game', function(result) {
+    socket.on('end game', function (result) {
         console.log('Game ended: ' + result);
         io.sockets.in(socket.room).emit('end game', result);
         socket.leave(socket.room);
     });
 
     // when the user disconnects.. perform this
-    socket.on('disconnect', function() {
+    socket.on('disconnect', function () {
         console.log('*********** Player Left ****************');
         console.log(socket.id + ' | ' + socket.playerName);
         console.log('****************************************');
@@ -252,6 +222,6 @@ io.on('connection', function(socket) {
 
 
 // Starting server
-server.listen(3000, function() {
+server.listen(3000, function () {
     console.log('Server started at http://localhost:3000');
 });
