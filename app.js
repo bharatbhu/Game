@@ -3,14 +3,11 @@
 /**
  * Multiplayer Tic-Tac-Toe game using react and socketio libraries.
  */
-var fs = require('fs');
 var data = require('./data.json');
 var express = require('express'),
     app = express(),
     server = require('http').Server(app),
     io = require('socket.io')(server),
-    bodyParser = require('body-parser'),
-    methodOverride = require('method-override'),
     _ = require('underscore'),
     games = [],
     players = [],
@@ -25,18 +22,6 @@ var express = require('express'),
 app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
-app.use(bodyParser.urlencoded({
-    extended: true,
-    limit: '50mb'
-}));
-app.use(bodyParser.json({
-    limit: '50mb'
-}));
-app.use(methodOverride());
-
-/**
- * ROUTES
- */
 
 app.get('/', function (req, res, next) {
     res.render('app.ejs', {
