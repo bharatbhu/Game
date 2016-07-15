@@ -6,6 +6,7 @@
 var data = require('./data.json');
 var express = require('express'),
     app = express(),
+    fs=require('fs'),
     server = require('http').Server(app),
     io = require('socket.io')(server),
     _ = require('underscore'),
@@ -14,7 +15,7 @@ var express = require('express'),
     numPlayers = 0,
     gamesCount = 0,
     playersWaiting = [],
-    SIZE = data.size;
+    SIZE = 3;
 /**
  * CONFIGURING EXPRESS
  */
@@ -27,6 +28,15 @@ app.get('/', function (req, res, next) {
     res.render('app.ejs', {
         title: "Tic Tac Toe"
     });
+});
+
+app.get('/saveData', function (req, res, next) {
+    if (!!req.query.result) {
+   data=req.query.result;
+   fs.writeFile('./data.json', JSON.stringify(data), function (err) {
+          if (err) return console.log(err);
+    });
+   }
 });
 
 io.on('connection', function (socket) {

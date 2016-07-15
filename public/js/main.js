@@ -72,8 +72,25 @@ $(document).ready(function() {
 
     // Send move to opponent
     socket.on('end game', function(result) {
+        console.log('result ',result, playerName);
         if (result === playerName) {
             $('#resultText').html('You won!');
+                    $.ajax(
+            {
+                url: "/saveData",
+                data: {
+                    "result":{
+                        'winner':result,
+                        'date': new Date()
+                    }
+                },
+                type: 'get',
+                success: function(data){
+                },
+                error:function(data){
+                    //    console.log('error result ',data);
+                }
+            });
         } else if (result === 'Tied') {
             $('#resultText').html('It\'s a tie!');
         } else {
