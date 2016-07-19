@@ -1,5 +1,5 @@
 var path = require('path');
-
+var bodyParser = require('body-parser');
 var express = require('express');
 var data = require('./data.json');
 var config = require('./config.json');
@@ -7,27 +7,37 @@ var config = require('./config.json');
 var app = express();
 var fs=require('fs');
 app.use('/', express.static(path.join(__dirname, 'public')));
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 var server = app.listen(3000);
 console.log('Server listening on port 3000: http://localhost:3000');
 
 /* socket IO available here */
 var io = require('socket.io')(server);
 
+app.use(function(req, res, next) {
+    // Set permissive CORS header - this allows this server to be used only as
+    // an API server in conjunction with something like webpack-dev-server.
+    res.setHeader('Access-Control-Allow-Origin', '*');
+
+    // Disable caching so we'll always get the latest comments.
+    res.setHeader('Cache-Control', 'no-cache');
+    next();
+});
 /* We get winning status of player and save it to json file. */
-app.get('/status', function (req, res, next) {
-    res.json("success");
+app.post('/status', function (req, res) {
      res.status(200);
-    if (!!req.query.result) {
-   data=req.query.result;
+    if (!!req.body.result) {
+   var data=req.body.result;
    fs.writeFile('./data.json', JSON.stringify(data), function (err) {
           if (err) return console.log(err);
     });
    }
+    res.json(data);
 });
 
 /* We receive the data from json and send it to client to show the winning history.*/
-app.get('/history', function (req, res, next) {
+app.get('/history', function (req, res) {
     res.json(readJsonFileSync(data));
     res.status(200);
 });

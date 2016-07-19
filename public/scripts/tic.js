@@ -114,17 +114,17 @@ var TicTacToe = React.createClass({
         $.ajax(
             {
                 url: "/status",
+                type: 'POST',
                 data: {
                     "result":{
                         'winner': playerMarker,
                         'date': new Date()
                     }
                 },
-                type: 'get',
                 success: function(data){
-                    
+                    console.log(data);  
                 },
-                error:function(data){
+                error:function(err){
                     //    console.log('error result ',data);
                 }
             });
