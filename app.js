@@ -56,12 +56,14 @@ function readJsonFileSync(data, encoding){
 /* Game configs */
 var SIZE = config.size,
     MARKERS = ['X', 'O'],
+    MARKERS_NAME = ['player1', 'player2'],
     currentConnections = 0,
     initialGameState, activeMarker;
 
 function _init() {
     initialGameState = getInitialState(SIZE);
     activeMarker = MARKERS[0];
+    activeMarker_name = MARKERS_NAME[0];
 }
 
 function getInitialState(size) {
@@ -94,12 +96,15 @@ io.on('connection', function (socket) {
         }
 
         socket.marker = MARKERS[currentConnections - 1];
+        socket.marker_name = MARKERS_NAME[currentConnections - 1];
 
         socket.emit('game:started', {
             size: SIZE,
             data: initialGameState,
             marker: MARKERS[currentConnections - 1],
-            activeMarker: activeMarker
+            marker_name: MARKERS_NAME[currentConnections - 1],
+            activeMarker: activeMarker,
+            activeMarker_name: activeMarker_name
         });
 
         if (currentConnections < 2) {

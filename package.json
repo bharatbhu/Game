@@ -9,7 +9,6 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.15.2",
-    "ejs": "^2.2.4",
     "express": "^4.11.2",
     "file-system": "^2.2.1",
     "react": "^0.12.2",

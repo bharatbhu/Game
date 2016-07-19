@@ -21,6 +21,7 @@ var Cell = React.createClass({
 
 /* Row component */
 var playerMarker;
+var playerMarker_name;
 var Row = React.createClass({
     render: function () {
         var cells = [];
@@ -86,7 +87,8 @@ var TicTacToe = React.createClass({
                         <span id="turn_marker_O" className="turn_marker">&#x2713; </span>
                     </div>
                 </div>
-                <span className="player_info">You are playing with <b id="player_marker">X</b></span>
+                <span className="player_info">You are playing with <b id="player_marker">X</b></span><br/>
+                <span className="player_info_name"><label>Enter your name: </label><input id="player_marker_name"></input><b id="player_marker_name"></b></span>                
                 <div className="popup" id="popup">
                     <div className="content">
                         <div id="popupContent">You Won...</div>
@@ -111,13 +113,20 @@ var TicTacToe = React.createClass({
     },
 
     _share_status: function() {
+        if ($("#player_marker_name").val() === "")
+        {
+         var player_name = $("#player_marker_name").text();
+        }
+        else {
+          var player_name = $("#player_marker_name").val();
+        };
         $.ajax(
             {
                 url: "/status",
                 type: 'POST',
                 data: {
                     "result":{
-                        'winner': playerMarker,
+                        'winner': player_name,
                         'date': new Date()
                     }
                 },
@@ -213,11 +222,17 @@ var App = React.createClass({
             self.setState({
                 data: options.data,
                 size: options.size || self.state.size,
-                marker: options.marker || self.state.marker
+                marker: options.marker || self.state.marker,
+                marker_name: options.marker_name || self.state.marker_name
             });
 
             document.getElementById('player_marker').innerHTML = options.marker;
+            document.getElementById('player_marker_name').innerHTML = options.marker_name;
+            $("#player_marker_name").change(function() {
+                var player_name = $("#player_marker_name").val();
+            });
             playerMarker = options.marker;
+            playerMarker_name = options.marker_name;
         });
 
         this.socket.on('game:start:limit:exceeded', function () {
