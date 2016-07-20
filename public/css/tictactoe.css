@@ -99,6 +99,24 @@ td {
     margin: 0 0 20px 20px;
 }
 
+.player_info_name {
+    float: left;
+    border: 1px solid #666;
+    width: 200px;
+    padding: 5px;
+    font-size: 20px;
+    margin: 0 0 20px 20px;
+}
+
+.player_history {
+    float: left;
+    border: 1px solid #666;
+    width: 200px;
+    color: green;
+    padding: 5px;
+    font-size: 20px;
+    margin: 0 0 20px 20px;
+}
 .show {
     display: block;
 }

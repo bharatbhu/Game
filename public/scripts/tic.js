@@ -72,8 +72,8 @@ var TicTacToe = React.createClass({
                         {rows}
                     </tbody>
                 </table>
-                <div id = "playerHistory">Last Winner was: {winner}</div>
-                <div id="overlay" className="overlay"><b>Waiting for second player</b></div>
+                <div id = "playerHistory" className="player_history">Last Winner was: {winner}</div>
+                <div id="overlay" className="overlay"><label>Enter your Board grid size: </label><input type="number" id="board_size"  onChange={this._grid_size}></input></div>
                 <div id="overlay_turn" className="overlay_turn"><b>Wait for your turn</b></div>
                 <div className="information">
                     <div className="information_box">
@@ -87,8 +87,8 @@ var TicTacToe = React.createClass({
                         <span id="turn_marker_O" className="turn_marker">&#x2713; </span>
                     </div>
                 </div>
-                <span className="player_info">You are playing with <b id="player_marker">X</b></span><br/>
-                <span className="player_info_name"><label>Enter your name: </label><input id="player_marker_name"></input><b id="player_marker_name"></b></span>                
+                <span className="player_info">You are playing with <b id="player_marker">X</b></span>
+                <div className="player_info_name"><label>Enter your name: </label><input id="player_marker_name"></input></div>                
                 <div className="popup" id="popup">
                     <div className="content">
                         <div id="popupContent">You Won...</div>
@@ -111,7 +111,28 @@ var TicTacToe = React.createClass({
             this.props.onRestart();
         }
     },
-
+    _grid_size: function() {
+        var numSize = parseInt($("#board_size").val());
+        if (numSize < 3){
+            numSize = 3;
+        }
+            $.ajax({
+              url: "/setSize",
+              type: 'POST',
+              data: {
+                 "result":{
+                    'size': numSize
+                 }
+              },
+              success: function(data){
+                console.log(data);
+              },
+              error:function(err){
+                // console.log('error result ',data);
+              }
+            });
+            window.location.reload(true);
+    },
     _share_status: function() {
         if ($("#player_marker_name").val() === "")
         {

@@ -35,7 +35,17 @@ app.post('/status', function (req, res) {
    }
     res.json(data);
 });
-
+/* We get grid board Size from here and stores it to json file*/
+app.post('/setSize', function (req, res) {
+     res.status(200);
+    if (!!req.body.result) {
+   var data=req.body.result;
+   fs.writeFile('./config.json', JSON.stringify(data), function (err) {
+          if (err) return console.log(err);
+    });
+   }
+    res.json(data);
+});
 /* We receive the data from json and send it to client to show the winning history.*/
 app.get('/history', function (req, res) {
     res.json(readJsonFileSync(data));
