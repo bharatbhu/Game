@@ -131,7 +131,14 @@ var TicTacToe = React.createClass({
                 // console.log('error result ',data);
               }
             });
-            window.location.reload(true);
+
+
+            setTimeout(function(){
+                 $('#board_size').slideUp('slow').fadeOut(function() {
+                     window.location.reload();
+                 });
+            }, 50);
+
     },
     _share_status: function() {
         if ($("#player_marker_name").val() === "")
