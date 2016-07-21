@@ -2,7 +2,7 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var express = require('express');
 var data = require('./data.json');
-
+var config = require('./config.json');
 /* Server part code */
 var app = express();
 var fs=require('fs');
@@ -46,7 +46,6 @@ app.post('/setSize', function (req, res) {
    }
     res.json(data);
 });
-var config = require('./config.json');
 /* We receive the data from json and send it to client to show the winning history.*/
 app.get('/history', function (req, res) {
     res.json(readJsonFileSync(data));
