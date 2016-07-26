@@ -1,6 +1,6 @@
 var should = require('should');
 var io = require('socket.io-client');
-var socketURL = 'http://localhost:3000';
+var socketURL = 'http://localhost:5000';
 
 var options = {
     transports: ['websocket'],
