@@ -8,8 +8,8 @@ var fs=require('fs');
 app.use('/', express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-var server = app.listen(3000);
-console.log('Server listening on port 3000: http://localhost:3000');
+var server = app.listen(process.env.PORT || 5000);
+console.log('Server listening on port 5000: http://localhost:5000');
 
 /* socket IO available here */
 var io = require('socket.io')(server);
