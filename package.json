@@ -3,7 +3,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha --reporter spec"
+    "test": "./node_modules/.bin/mocha --reporter spec",
+    "start": "nodemon app.js"
   },
   "author": "Bharat Bhushan",
   "license": "ISC",
