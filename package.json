@@ -1,13 +1,9 @@
 {
   "version": "1.0.0",
-  "engines": {
-    "node": "4.2.3"
-  },
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha --reporter spec",
-    "start": "nodemon app.js"
+    "test": "./node_modules/.bin/mocha --reporter spec"
   },
   "author": "Bharat Bhushan",
   "license": "ISC",
@@ -23,5 +19,9 @@
     "mocha": "^2.5.3",
     "should": "^9.0.2",
     "socket.io-client": "^1.4.8"
+  },
+
+  "engines": {
+    "node": "4.2.3"
   }
 }
