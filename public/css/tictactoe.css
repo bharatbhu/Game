@@ -26,12 +26,25 @@ body {
     position: absolute;
     top: 88px;
     width: 475px;
-    height: 475px;
+    height: 477px;
     background: #000;
     opacity: 0.55;
     display: none;
 }
 
+.overlay label{
+    font-size: x-large;
+    font-weight: bold;
+    padding-left: 1px;
+    color: #013220;
+    background-color: #C3B091;
+}
+.overlay input{
+    height: 21px;
+    top: -4px;
+    left: 4px;
+    position: relative;
+}
 .overlay b, .overlay_turn b {
     text-align: center;
     font-size: 35px;

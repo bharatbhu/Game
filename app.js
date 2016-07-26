@@ -3,7 +3,6 @@ var bodyParser = require('body-parser');
 var express = require('express');
 var data = require('./data.json');
 var config = require('./config.json');
-/* Server part code */
 var app = express();
 var fs=require('fs');
 app.use('/', express.static(path.join(__dirname, 'public')));
@@ -16,11 +15,11 @@ console.log('Server listening on port 3000: http://localhost:3000');
 var io = require('socket.io')(server);
 
 app.use(function(req, res, next) {
-    // Set permissive CORS header - this allows this server to be used only as
-    // an API server in conjunction with something like webpack-dev-server.
+    /* Set permissive CORS header - this allows this server to be used only as
+     an API server in conjunction with something like webpack-dev-server. */
     res.setHeader('Access-Control-Allow-Origin', '*');
 
-    // Disable caching so we'll always get the latest comments.
+    /* Disable caching so we'll always get the latest comments.*/
     res.setHeader('Cache-Control', 'no-cache');
     next();
 });
@@ -28,12 +27,13 @@ app.use(function(req, res, next) {
 app.post('/status', function (req, res) {
      res.status(200);
     if (!!req.body.result) {
-   var data=req.body.result;
+     var data=req.body.result;
    fs.writeFile('./data.json', JSON.stringify(data), function (err) {
           if (err) return console.log(err);
     });
+   res.json(data);
    }
-    res.json(data);
+
 });
 /* We get grid board Size from here and stores it to json file*/
 app.post('/setSize', function (req, res) {
@@ -73,7 +73,7 @@ var SIZE = parseInt(config.size),
 function _init() {
     initialGameState = getInitialState(SIZE);
     activeMarker = MARKERS[0];
-    activeMarker_name = MARKERS_NAME[0];
+    activeMarkerName = MARKERS_NAME[0];
 }
 
 function getInitialState(size) {
@@ -114,7 +114,7 @@ io.on('connection', function (socket) {
             marker: MARKERS[currentConnections - 1],
             marker_name: MARKERS_NAME[currentConnections - 1],
             activeMarker: activeMarker,
-            activeMarker_name: activeMarker_name
+            activeMarkerName: activeMarkerName
         });
 
         if (currentConnections < 2) {

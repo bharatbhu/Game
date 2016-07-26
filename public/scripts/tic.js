@@ -21,7 +21,7 @@ var Cell = React.createClass({
 
 /* Row component */
 var playerMarker;
-var playerMarker_name;
+var playerMarkerName;
 var Row = React.createClass({
     render: function () {
         var cells = [];
@@ -59,7 +59,6 @@ var TicTacToe = React.createClass({
     render: function () {
         var rows = [];
         var i;
-        var his ;
         for (i = 0; i < this.props.size; i++) {
             rows.push(<Row {...this.props} data={this.getMappedData(this.props.data[i]) } key={i} rowNum={i}/>);
         }
@@ -73,7 +72,7 @@ var TicTacToe = React.createClass({
                     </tbody>
                 </table>
                 <div id = "playerHistory" className="player_history">Last Winner was: {winner}</div>
-                <div id="overlay" className="overlay"><label>Enter your Board grid size: </label><input type="number" id="board_size"  onChange={this._grid_size}></input></div>
+                <div id="overlay" className="overlay"><label>Enter your Board grid size: </label><input type="number" id="board_size"  onChange={this._gridSize}></input></div>
                 <div id="overlay_turn" className="overlay_turn"><b>Wait for your turn</b></div>
                 <div className="information">
                     <div className="information_box">
@@ -94,7 +93,7 @@ var TicTacToe = React.createClass({
                         <div id="popupContent">You Won...</div>
                         <table>
                           <tr>
-                           <td><button id="share" onClick={this._share_status}>Share your status</button><br></br></td>
+                           <td><button id="share" onClick={this._shareStatus}>Share your status</button><br></br></td>
 
                            <td><button id="restartGame" className="restartGame" onClick={this._restartGame}>Restart Game</button></td>
                           </tr>
@@ -111,45 +110,32 @@ var TicTacToe = React.createClass({
             this.props.onRestart();
         }
     },
-    _grid_size: function() {
+    _gridSize: function() {
         var numSize = parseInt($("#board_size").val());
         if (numSize < 3){
             numSize = 3;
         }
             $.ajax({
-              url: "/setSize",
-              type: 'POST',
-              data: {
-                 "result":{
-                    'size': numSize
-                 }
-              },
-              success: function(data){
-                console.log(data);
-              },
-              error:function(err){
-                // console.log('error result ',data);
-              }
+                url: "/setSize",
+                type: 'POST',
+                data: {
+                    "result":{
+                        'size': numSize
+                    }
+                },
+                success: function(data){
+                    $('#board_size').slideUp('slow').fadeOut(function() {
+                        window.location.reload();
+                    });
+                },
+                error:function(err){
+                }
             });
 
-
-            setTimeout(function(){
-                 $('#board_size').slideUp('slow').fadeOut(function() {
-                     window.location.reload();
-                 });
-            }, 50);
-
     },
-    _share_status: function() {
-        if ($("#player_marker_name").val() === "")
-        {
-         var player_name = $("#player_marker_name").text();
-        }
-        else {
-          var player_name = $("#player_marker_name").val();
-        };
-        $.ajax(
-            {
+    _shareStatus: function() {
+        var player_name = ($("#player_marker_name").val() === "") ? $("#player_marker_name").text() : $("#player_marker_name").val();
+        $.ajax({
                 url: "/status",
                 type: 'POST',
                 data: {
@@ -159,10 +145,8 @@ var TicTacToe = React.createClass({
                     }
                 },
                 success: function(data){
-                    console.log(data);  
                 },
                 error:function(err){
-                    //    console.log('error result ',data);
                 }
             });
     },
@@ -200,7 +184,6 @@ var App = React.createClass({
                 type: 'get',
                 success: function(data){
                     _this.setState({winnerData: data});
-                    // console.log(data);
                     document.createElement
                     if (!$("#playerHistory")) {
                         console.log("div not found..");
@@ -209,7 +192,6 @@ var App = React.createClass({
                     $("#playerHistory").text("temporary text..")
                 },
                 error:function(data){
-                    //    console.log('error result ',data);
                 }
             });
     },
@@ -254,13 +236,13 @@ var App = React.createClass({
                 marker_name: options.marker_name || self.state.marker_name
             });
 
-            document.getElementById('player_marker').innerHTML = options.marker;
+            document.getElementById('player_marker').value = options.marker;
             document.getElementById('player_marker_name').innerHTML = options.marker_name;
             $("#player_marker_name").change(function() {
                 var player_name = $("#player_marker_name").val();
             });
             playerMarker = options.marker;
-            playerMarker_name = options.marker_name;
+            playerMarkerName = options.marker_name;
         });
 
         this.socket.on('game:start:limit:exceeded', function () {
